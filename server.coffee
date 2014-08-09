@@ -15,6 +15,5 @@ if process.env.REDISCLOUD_URL
   redis = require 'socket.io-redis'
   url = process.env.REDISCLOUD_URL
   url = url.replace /:\/\/\w+:/, '://:'
-  pubClient = require('redis-url').connect url
-  subClient = require('redis-url').connect url
-  io.adapter redis(pubClient: pubClient, subClient: subClient)
+  client = require('redis-url').connect url
+  io.adapter redis(pubClient: client, subClient: client)
