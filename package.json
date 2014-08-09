@@ -17,6 +17,7 @@
     "morgan": "1.2.2",
     "newrelic": "^1.9.2",
     "node-dev": "2.3.0",
+    "redis-url": "0.2.0",
     "static-favicon": "1.0.2"
   },
   "engines": {
