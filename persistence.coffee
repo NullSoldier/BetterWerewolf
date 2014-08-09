@@ -25,6 +25,7 @@ class RedisPersistence
 
   set: (key, value, callback) ->
     @client.set key, JSON.stringify(value), callback
+    @client.expire key, 60 * 60
     return
 
   get: (key, callback) ->
