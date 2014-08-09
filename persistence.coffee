@@ -27,7 +27,7 @@ class RedisPersistence
     @client.set key, JSON.stringify(value), callback
     return
 
-  get: (key, value, callback) ->
+  get: (key, callback) ->
     @client.get key, (err, value) ->
       if value
         value = JSON.parse value
