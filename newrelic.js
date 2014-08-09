@@ -239,7 +239,7 @@ exports.config = {
      *
      * @env NEW_RELIC_IGNORING_RULES
      */
-    ignore : []
+    ignore : ['^/socket.io/.*/xhr-polling']
   },
   /**
    * By default, any transactions that are not affected by other bits of
