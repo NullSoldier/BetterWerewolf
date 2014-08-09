@@ -12,10 +12,6 @@ module.exports = (grunt) ->
       options:
         spawn: false
 
-      coffee:
-        files: 'public/{**/,}*.coffee'
-        tasks: 'coffee'
-
       gruntfile:
         files: 'Gruntfile.coffee'
 
@@ -25,23 +21,11 @@ module.exports = (grunt) ->
 
         files: [
           'public/{**/,}*.html'
+          'public/{**/,}*.css'
+          'public/{**/,}*.less'
           'public/{**/,}*.js'
-          'compiled/{**/,}*.js'
+          'public/{**/,}*.coffee'
         ]
-
-    coffee:
-      scripts:
-        expand: true
-        cwd: 'public'
-        src: ['*.coffee', '**/*.coffee']
-        dest: 'compiled'
-        ext: '.js'
-
-    bgShell:
-      server:
-        cmd: 'npm start'
-        bg: true
-        fail: true
 
     connect:
       options:
@@ -62,7 +46,6 @@ module.exports = (grunt) ->
             ]
 
   grunt.registerTask 'server', [
-    'coffee',
     'configureProxies',
     'connect:livereload',
     'watch'

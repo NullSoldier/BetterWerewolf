@@ -1,13 +1,14 @@
-bodyParser   = require 'body-parser'
-compression  = require 'compression'
-cookieParser = require 'cookie-parser'
-express      = require 'express'
-favicon      = require 'static-favicon'
-logger       = require 'morgan'
-path         = require 'path'
-routes       = require './routes/index'
-swig         = require 'swig'
-users        = require './routes/users'
+bodyParser       = require 'body-parser'
+compression      = require 'compression'
+cookieParser     = require 'cookie-parser'
+express          = require 'express'
+favicon          = require 'static-favicon'
+logger           = require 'morgan'
+path             = require 'path'
+routes           = require './routes/index'
+swig             = require 'swig'
+users            = require './routes/users'
+coffeeMiddleware = require 'coffee-middleware'
 
 app = express()
 
@@ -24,7 +25,10 @@ app.use bodyParser.json()
 app.use bodyParser.urlencoded(extended: true)
 app.use cookieParser()
 app.use compression()
-app.use express.static(path.join(__dirname, 'public'))
+app.use coffeeMiddleware
+  src: __dirname + '/public'
+
+app.use express.static (__dirname + '/public')
 
 # set the routes
 app.use '/', routes
