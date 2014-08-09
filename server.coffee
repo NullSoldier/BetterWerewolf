@@ -1,6 +1,5 @@
 if process.env.NODE_ENV is 'production'
-  # require 'newrelic'
-  1
+  require 'newrelic'
 
 debug = require('debug') 'BetterWerewolf'
 app = require './app'
@@ -14,6 +13,8 @@ io = require('socket.io').listen server
 
 if process.env.REDISCLOUD_URL
   redis = require 'socket.io-redis'
-  pubClient = require('redis-url').connect process.env.REDISCLOUD_URL
-  subClient = require('redis-url').connect process.env.REDISCLOUD_URL
+  url = process.env.REDISCLOUD_URL
+  url = url.replace /:\/\/\w+:/, '://:'
+  pubClient = require('redis-url').connect url
+  subClient = require('redis-url').connect url
   io.adapter redis(pubClient: pubClient, subClient: subClient)
