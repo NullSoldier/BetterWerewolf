@@ -1,5 +1,8 @@
+if process.env.NODE_ENV is 'production'
+  require 'newrelic'
+
 debug = require('debug') 'BetterWerewolf'
-app = require './app'
+app   = require './app'
 
 app.set 'port', process.env.PORT or 3000
 
