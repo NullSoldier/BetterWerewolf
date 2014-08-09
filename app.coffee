@@ -6,13 +6,17 @@ favicon      = require 'static-favicon'
 logger       = require 'morgan'
 path         = require 'path'
 routes       = require './routes/index'
+swig         = require 'swig'
 users        = require './routes/users'
 
 app = express()
 
 # view engine setup
 app.set 'views', path.join(__dirname, 'views')
-app.set 'view engine', 'jade'
+app.set 'view engine', 'html'
+app.engine 'html', swig.renderFile
+swig.setDefaults cache: false
+
 
 app.use favicon()
 app.use logger('dev')
