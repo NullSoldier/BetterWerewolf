@@ -3,7 +3,6 @@ coffee       = require 'coffee-middleware'
 compression  = require 'compression'
 cookieParser = require 'cookie-parser'
 express      = require 'express'
-favicon      = require 'static-favicon'
 less         = require 'express-less'
 logger       = require 'morgan'
 path         = require 'path'
@@ -17,8 +16,6 @@ app.set 'view engine', 'html'
 app.engine 'html', swig.renderFile
 swig.setDefaults cache: false
 
-
-app.use favicon("#{ __dirname }/public/favicon.ico")
 app.use logger('dev')
 app.use bodyParser.json()
 app.use bodyParser.urlencoded(extended: true)
