@@ -18,7 +18,7 @@ app.engine 'html', swig.renderFile
 swig.setDefaults cache: false
 
 
-app.use favicon()
+app.use favicon("#{ __dirname }/public/favicon.ico")
 app.use logger('dev')
 app.use bodyParser.json()
 app.use bodyParser.urlencoded(extended: true)
