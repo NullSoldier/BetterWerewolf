@@ -8,13 +8,18 @@
   <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.20/angular.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/angular.js/1.2.20/angular-route.js"></script>
+  <script src="https://rawgit.com/grevory/angular-local-storage/master/angular-local-storage.js"></script>
   <script src="/socket.io/socket.io.js"></script>
 
-  <script>angular.module('WolvesApp', []);</script>
+  <script src="/app/init.js"></script>
 
-  <script src="/app/boot.js"></script>
+  <script src="/app/controllers/root.js"></script>
+
+  <script src="/app/start.js"></script>
 </head>
-<body ng-app="WolvesApp">
+<body ng-app="WolvesApp" ng-controller="RootController" ng-cloak>
+
+Hello {{ playerName }}
 
   <div ng-view class="container"></div>
 
