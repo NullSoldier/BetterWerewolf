@@ -1,11 +1,14 @@
-angular.module('WolvesApp')
-  .controller 'RootController', ($scope, localStorageService) ->
+angular.module('WolvesApp').controller 'RootController', ($scope, localStorageService) ->
+  $scope.player = localStorageService.get 'player'
+  $scope.player ?= {}
 
-    $scope.playerName = localStorageService.get('player name')
+  until $scope.player.id and $scope.player.name
+    id = UUID()
+    name = prompt 'Please enter a player name'
 
-    until $scope.playerName
-      $scope.playerName = prompt('Please enter a player name')
+    if name
+      $scope.player =
+        id  : id
+        name: name
 
-      if $scope.playerName
-        localStorageService.set('player name', $scope.playerName)
-
+      localStorageService.set 'player', $scope.player

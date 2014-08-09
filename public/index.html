@@ -19,9 +19,7 @@
   <script src="/app/start.js"></script>
 </head>
 <body ng-app="WolvesApp" ng-controller="RootController" ng-cloak>
-
-Hello {{ playerName }}
-
+  <div ng-if="player">Hello <b>{{ player.name }} [{{ player.id }}]</b></div>
   <div ng-view class="container"></div>
 
 </body>
