@@ -1,14 +1,13 @@
-bodyParser       = require 'body-parser'
-compression      = require 'compression'
-cookieParser     = require 'cookie-parser'
-express          = require 'express'
-favicon          = require 'static-favicon'
-logger           = require 'morgan'
-path             = require 'path'
-routes           = require './routes/index'
-swig             = require 'swig'
-users            = require './routes/users'
-coffeeMiddleware = require 'coffee-middleware'
+bodyParser   = require 'body-parser'
+coffee       = require 'coffee-middleware'
+compression  = require 'compression'
+cookieParser = require 'cookie-parser'
+express      = require 'express'
+favicon      = require 'static-favicon'
+less         = require 'express-less'
+logger       = require 'morgan'
+path         = require 'path'
+swig         = require 'swig'
 
 app = express()
 
@@ -25,14 +24,17 @@ app.use bodyParser.json()
 app.use bodyParser.urlencoded(extended: true)
 app.use cookieParser()
 app.use compression()
-app.use coffeeMiddleware
-  src: __dirname + '/public'
 
-app.use express.static (__dirname + '/public')
+# compile coffeescript files on the fly
+app.use coffee(src: "#{ __dirname }/public")
+
+# compile less files on the fly
+app.use less("#{ __dirname }/public")
+
+app.use express.static "#{ __dirname }/public"
 
 # set the routes
-app.use '/', routes
-app.use '/users', users
+app.use '/', require('./routes/index')
 
 # catch 404 and forward to error handler
 app.use (req, res, next) ->
