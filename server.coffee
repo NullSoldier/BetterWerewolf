@@ -1,5 +1,6 @@
 if process.env.NODE_ENV is 'production'
-  require 'newrelic'
+  # require 'newrelic'
+  1
 
 debug = require('debug') 'BetterWerewolf'
 app = require './app'
