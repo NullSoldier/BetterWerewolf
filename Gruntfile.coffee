@@ -1,6 +1,6 @@
 'use strict'
 
-LIVERELOAD_PORT=31337
+LIVERELOAD_PORT = 31337
 lrsnippet = require('connect-livereload')
   port: LIVERELOAD_PORT
 
@@ -20,11 +20,11 @@ module.exports = (grunt) ->
           livereload: LIVERELOAD_PORT
 
         files: [
-          'public/{**/,}*.html'
-          'public/{**/,}*.css'
-          'public/{**/,}*.less'
-          'public/{**/,}*.js'
           'public/{**/,}*.coffee'
+          'public/{**/,}*.css'
+          'public/{**/,}*.html'
+          'public/{**/,}*.js'
+          'public/{**/,}*.less'
         ]
 
     connect:
