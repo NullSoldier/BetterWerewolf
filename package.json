@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "DEBUG=BetterWerewolf node_modules/.bin/node-dev server.coffee",
-    "cluster": "NODE_ENV=production node_modules/.bin/coffee cluster.coffee"
+    "server": "NODE_ENV=production node_modules/.bin/coffee server.coffee"
   },
   "dependencies": {
     "body-parser": "1.6.2",
