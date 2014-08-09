@@ -13,4 +13,6 @@ io = require('socket.io').listen server
 
 if process.env.REDISCLOUD_URL
   redis = require 'socket.io-redis'
-  io.adapter redis(process.env.REDISCLOUD_URL)
+  pubClient = require('redis-url').connect process.env.REDISCLOUD_URL
+  subClient = require('redis-url').connect process.env.REDISCLOUD_URL
+  io.adapter redis(pubClient: pubClient, subClient: subClient)
