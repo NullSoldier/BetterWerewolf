@@ -19,25 +19,28 @@
   <script src="/app/controllers/root.js"></script>
   <script src="/app/services/gamestate.js"></script>
 
+  <script src="/app/directives/selectplayers.js"></script>
   <script src="/app/directives/gamelobby.js"></script>
   <script src="/app/directives/gamenight.js"></script>
   <script src="/app/directives/gameday.js"></script>
   <script src="/app/directives/gameended.js"></script>
 </head>
 <body ng-app="WolvesApp" ng-controller="RootController" ng-cloak>
-  <div ng-if="player">Playing as <b>{{ player.name }} [{{ player.id }}]</b></div>
-  <hr>
-  <div ng-switch="currentGame.state">
-    <div ng-switch-when="loading">
-      Loading ...
+
+  <div ng-if="currentGame && currentGame.players">
+
+    <div ng-if="player">Playing as <b>{{ player.name }} [{{ player.id }}]</b></div>
+    <hr>
+    <div ng-switch="currentGame.state">
+      <div ng-switch-when="lobby" game-lobby></div>
+      <div ng-switch-when="night" game-night></div>
+      <div ng-switch-when="day"   game-day></div>
+      <div ng-switch-when="ended" game-ended></div>
+      <div ng-switch-default>
+        No matches for {{ gameState.state }}
+      </div>
     </div>
-    <div ng-switch-when="lobby" game-lobby></div>
-    <div ng-switch-when="night" game-night></div>
-    <div ng-switch-when="day"   game-day></div>
-    <div ng-switch-when="ended" game-ended></div>
-    <div ng-switch-default>
-    No matches for {{ gameState.state }}
-    </div>
+
   </div>
 </body>
 </html>

@@ -1,0 +1,7 @@
+<div ng-repeat="player in players">
+  <label>
+    <input ng-model="player.selected" type="checkbox"> {{ player.name }}
+  </label>
+</div>
+
+<div class="btn btn-primary" ng-disabled="actionDisabled" ng-click="actionClick()">{{ actionText }}</div>

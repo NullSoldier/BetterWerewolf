@@ -1,5 +1,50 @@
-Game night
+You are a <b>{{ player.startRole }}</b>
 
 <hr>
 
-You are a {{ player.startRole }}
+<div ng-if="!player.hasDoneAction">
+  <div ng-switch="player.startRole">
+    <div ng-switch-when="seer">
+      Look at a card, or two in the middle
+      <ul>
+        <li>Look at 2 middle cards</li>
+        <li ng-repeat="other in others">
+          Look at {{ other.name }}'s card
+          </li>
+      </ul>
+    </div>
+    <div ng-switch-when="werewolf">
+      <div ng-if="werewolves.length">
+        The other werewolves are
+        <ul>
+          <li ng-repeat="p in werewolves">{{ p.name }}</li>
+        </ul>
+      </div>
+      <div ng-if="!werewolves.length">
+        You see no other werewolves
+      </div>
+    </div>
+    <div ng-switch-when="minion">
+      <div ng-if="werewolves.length">
+      The other werewolves are
+        <ul>
+          <li ng-repeat="p in werewolves">{{ p.name }}</li>
+        </ul>
+      </div>
+      <div ng-if="!werewolves.length">
+        You see no werewolves.
+      </div>
+    </div>
+    <div ng-switch-when="robber">
+      Select a persons card to steal
+      <div select-players count="1" source="others" actionText="Steal Card" done="stealPlayer">
+    </div>
+    <div ng-switch-when="troublemaker">
+      Switch two other peoples cards
+      <div select-players count="2" source="others" actionText="Swap Cards" done="swapPlayer">
+    </div>
+  </div>
+</div>
+<div ng-if="player.hasDoneAction">
+  Thanks for doing your action
+</div>

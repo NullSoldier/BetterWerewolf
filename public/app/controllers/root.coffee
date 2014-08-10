@@ -18,7 +18,7 @@ angular.module('WolvesApp').controller 'RootController',
 
     # keep $scope.player in sync with $scope.currentGame.players
     $scope.$watch 'currentGame.players', (players) ->
-      if $scope.player.id of players
+      if players and $scope.player.id of players
         $scope.player = players[$scope.player.id]
 
     return
