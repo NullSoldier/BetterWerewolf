@@ -10,6 +10,8 @@ createNewGameState = ->
     nightEnd: null
     players: {}
     unclaimed: []
+    actions: []
+    nightResponseCount: 0
     roles: {
       werewolf    : 1
       minion      : 0
@@ -74,6 +76,26 @@ sendPlayerState = (to) ->
   to.emit 'players', app.gameState.players
   return
 
+resolveActions = ->
+  actionOrder = [
+    'robber'
+    'troublemaker'
+  ]
+
+  sortedActions = _.sortBy app.gameState.actions, (a) -> actionOrder.indexOf a.type
+
+  for action in sortedActions
+    from = app.gameState.players[action.from]
+    to   = app.gameState.players[action.to]
+
+    console.log "#{ from.name } swapped their #{ from.currentRole } for #{ to.name }'s #{ to.currentRole }"
+
+    # swap roles
+    toCurrent = to.currentRole
+    to.currentRole = from.currentRole
+    from.currentRole = to.toCurrent
+  return
+
 io.on 'connection', (socket) ->
 
   socket.on 'startGame', ->
@@ -118,6 +140,29 @@ io.on 'connection', (socket) ->
 
     sendGameState socket
     sendPlayerState io
+    return
+
+  socket.on 'nightAction', ({type, fromId, toId}) ->
+    player = app.gameState.players[socket.playerId]
+    player.hasDoneAction = true
+
+    # queue up player action
+    switch player.startRole
+      when 'robber', 'troublemaker'
+        app.gameState.actions.push
+          type: player.startRole
+          from: socket.playerId
+          to  : targetId
+
+    app.gameState.nightResponseCount += 1
+
+    # once all players have gone, start day round
+    if app.gameState.nightResponseCount is app.gameState.players.length
+      resolveActions()
+      setGameState 'day'
+      io.emit 'gameDayStart',
+        players  : app.gameState.players
+        unclaimed: app.gameState.unclaimed
     return
 
 module.exports = io
