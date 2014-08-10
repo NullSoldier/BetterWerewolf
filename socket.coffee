@@ -60,11 +60,8 @@ updateRole = (role, quantity, callback) ->
   app.gameState.roles[role] = quantity
   return
 
-updateDuration = (seconds, callback) ->
-  persistence.get 'gameState', (err, gameState) ->
-    gameState.durationSeconds = seconds
-    persistence.set 'gameState', gameState, callback
-
+updateDuration = (seconds) ->
+  app.gameState.durationSeconds = seconds
 
 sendGameState = (to) ->
   to.emit 'game',
@@ -103,9 +100,9 @@ io.on 'connection', (socket) ->
     return
 
   socket.on 'updateDuration', (seconds) ->
-    seconds = Number seconds
     console.log "Updating duration to #{seconds} seconds"
-    updateDuration seconds,  -> sendGameState io
+    updateDuration Number seconds
+    sendGameState io
     return
 
   socket.on 'join', (player) ->
