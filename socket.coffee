@@ -109,7 +109,7 @@ io.on 'connection', (socket) ->
 
   socket.on 'disconnect', ->
     if io.sockets.sockets.length is 0
-      last person disconnected, reset the game data.
+      # last person disconnected, reset the game data.
       createNewGameState()
       return
 
