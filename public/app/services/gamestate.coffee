@@ -1,14 +1,26 @@
 angular.module('WolvesApp').service 'GameState', ($log, $timeout) ->
   socket = io()
-  state = {}
+
+  state =
+    state: 'loading'
+    durationSeconds: null
+    roles: {}
+    players: {}
 
   socket.on 'game', (game) -> $timeout ->
+    state.state = game.state
     state.roles = game.roles
     state.duration = game.durationSeconds
     return
 
   socket.on 'players', (players) -> $timeout ->
     state.players = players
+    return
+
+  socket.on 'gameNightStart', ({players, unclaimed}) ->
+    state.state = 'night'
+    state.players = players
+    state.unclaimed = unclaimed
     return
 
   state.join = (player) ->
@@ -25,6 +37,4 @@ angular.module('WolvesApp').service 'GameState', ($log, $timeout) ->
       quantity: quantity
     return
 
-  $log.info 'gamestate service'
   return state
-

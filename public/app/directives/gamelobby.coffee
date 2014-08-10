@@ -31,12 +31,11 @@ angular.module('WolvesApp').directive 'gameLobby', ->
           index++
 
         $scope.roleCount += num
-        $scope.roles.push {
+        $scope.roles.push
           name: name
           max:  maxes[name] or 1
           num: num
           selected: selected
-        }
 
     $scope.$watch 'currentGame.roles', setRoles, true
     $scope.$watch 'currentGame.duration', setTimerValues

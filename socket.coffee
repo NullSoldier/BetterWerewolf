@@ -64,6 +64,7 @@ updateDuration = (seconds, callback) ->
 sendGameState = (to) ->
   persistence.get 'gameState', (err, gameState) ->
     to.emit 'game',
+      state          : gameState.state
       roles          : gameState.roles
       durationSeconds: gameState.durationSeconds
     return
@@ -82,8 +83,9 @@ io.on 'connection', (socket) ->
     return
 
   socket.on 'disconnect', ->
-    console.log "Player #{ socket.playerId } is leaving"
-    removePlayer socket.playerId, -> sendPlayerState io
+    if socket.playerId
+      console.log "Player #{ socket.playerId } is leaving"
+      removePlayer socket.playerId, -> sendPlayerState io
     return
 
   socket.on 'updateRole', ({role, quantity}) ->
