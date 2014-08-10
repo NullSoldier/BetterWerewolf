@@ -1,14 +1,15 @@
 io          = require('socket.io')()
-persistence = require './persistence'
 _           = require 'lodash'
+app         = require './app'
 
-createInitialGameState = ->
-  return {
+createNewGameState = ->
+  app.gameState = {
     state: 'lobby'
     durationSeconds: 600
     dayEnd: null
     nightEnd: null
     players: {}
+    unclaimed: []
     roles: {
       werewolf    : 1
       minion      : 0
@@ -19,40 +20,40 @@ createInitialGameState = ->
       tanner      : 0
     }
   }
-
-createGameState = ->
-  persistence.set 'gameState', createInitialGameState()
   return
 
-addPlayer = (player, callback) ->
-  persistence.get 'gameState', (err, gameState) ->
-    gameState.players[player.id] = player
-    persistence.set 'gameState', gameState
-    callback null, gameState.players
-    return
+setState = (state) ->
+  app.gameState.state = state
+  return
 
-removePlayer = (id, callback) ->
-  persistence.get 'gameState', (err, gameState) ->
-    delete gameState.players[id]
-    persistence.set 'gameState', gameState, callback
-    return
+addPlayer = (player) ->
+  app.gameState.players[player.id] = player
+  return
+
+removePlayer = (id) ->
+  delete app.gameState.players[id]
+  return
 
 assignRoles = ->
-  persistence.get 'gameState', (err, gameState) ->
-    roles    = _.keys gameState.roles
-    shuffled = _.shuffle roles
+  # build list of roles
+  roles = []
+  for role, quantity of app.gameState.roles
+    for i in [0...quantity]
+      roles.push role
 
-    for player in gameState.players
-      player.startRole = shuffled.pop()
-      player.currentRole = player.startRole
+  shuffled = _.shuffle roles
 
-    persistence.set 'gameState', gameState
-    return
+  for player of app.gameState.players
+    player.startRole = shuffled.pop()
+    player.currentRole = player.startRole
+    console.log "Assigned #{ player.name } to #{ player.startRole }"
+
+  while shuffled.length > 0
+    app.gameState.unclaimed.push shuffled.pop()
+  return
 
 updateRole = (role, quantity, callback) ->
-  persistence.get 'gameState', (err, gameState) ->
-    gameState.roles[role] = quantity
-    persistence.set 'gameState', gameState, callback
+  app.gameState.roles[role] = quantity
   return
 
 updateDuration = (seconds, callback) ->
@@ -62,35 +63,39 @@ updateDuration = (seconds, callback) ->
 
 
 sendGameState = (to) ->
-  persistence.get 'gameState', (err, gameState) ->
-    to.emit 'game',
-      state          : gameState.state
-      roles          : gameState.roles
-      durationSeconds: gameState.durationSeconds
-    return
+  to.emit 'game',
+    state          : app.gameState.state
+    roles          : app.gameState.roles
+    durationSeconds: app.gameState.durationSeconds
   return
 
 sendPlayerState = (to) ->
-  persistence.get 'gameState', (err, gameState) ->
-    to.emit 'players', gameState.players
-    return
+  to.emit 'players', app.gameState.players
   return
 
 io.on 'connection', (socket) ->
 
   socket.on 'startGame', ->
-    console.log 'Game Started'
+    console.log 'Night starting'
+
+    setState 'night'
+    assignRoles()
+    io.emit 'gameNightStart',
+      players  : app.gameState.players
+      unclaimed: app.gameState.unclaimed
     return
 
   socket.on 'disconnect', ->
     if socket.playerId
       console.log "Player #{ socket.playerId } is leaving"
-      removePlayer socket.playerId, -> sendPlayerState io
+      removePlayer socket.playerId
+      sendPlayerState io
     return
 
   socket.on 'updateRole', ({role, quantity}) ->
     console.log "Updating #{ role } to #{ quantity }"
-    updateRole role, quantity, -> sendGameState io
+    updateRole role, quantity
+    sendGameState io
     return
 
   socket.on 'updateDuration', (seconds) ->
@@ -102,17 +107,16 @@ io.on 'connection', (socket) ->
   socket.on 'join', (player) ->
     console.log "Player #{ player.id } joined as #{ player.name }"
 
-    persistence.get 'gameState', (err, gameState) ->
-      if not gameState
-        gameState = createInitialGameState()
-        persistence.set 'gameState', gameState
+    if not app.gameState
+      console.log 'Creating initial game state'
+      createNewGameState()
 
-      player.socketId = socket.id
-      socket.playerId = player.id
-      addPlayer player,  -> sendPlayerState io
+    player.socketId = socket.id
+    socket.playerId = player.id
+    addPlayer player
 
-      sendGameState io
-      return
+    sendGameState socket
+    sendPlayerState io
     return
 
 module.exports = io

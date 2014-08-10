@@ -37,4 +37,8 @@ angular.module('WolvesApp').service 'GameState', ($log, $timeout) ->
       quantity: quantity
     return
 
+  state.startGame = ->
+    socket.emit 'startGame'
+    return
+
   return state
