@@ -2,27 +2,42 @@ angular.module('WolvesApp').directive 'gameLobby', ->
   templateUrl: '/app/views/gamelobby.html'
 
   controller: ($scope, GameState) ->
+    maxes =
+      werewolf: 2
+      villager: 3
 
-    $scope.roles = [
-      { name: 'robber' }
-      { name: 'seer' }
-      { name: 'werewolf', max: 2 }
-      { name: 'troublemaker' }
-      { name: 'tanner' }
-      { name: 'villager', max: 3 }
-    ]
+    setRoles = (gameRoles) ->
+      if not gameRoles
+        return
 
-    for role in $scope.roles
-      role.max = role.max or 1
-      role.num = 0
-      role.selected = Array(role.max)
+      $scope.roles = []
+      for name, num of $scope.currentGame.roles
+        index = 0
+        selected = Array(maxes[name] or 1)
+        for value in selected
+          if num <= index
+            break
+          selected[index] = true
+          index++
+
+        $scope.roles.push {
+          name: name
+          max:  maxes[name] or 1
+          num: num
+          selected: selected
+        }
+
+    $scope.$watch 'currentGame.roles', setRoles, true
 
     $scope.toggleRole = (role, index) ->
       role.selected[index] = not role.selected[index]
       role.num = _.filter(role.selected).length
 
+      GameState.updateRole
+        role: role.name
+        quantity: role.num
+
     $scope.start = ->
-      console.log 'clicked start'
 
   link: (scope, element, attrs) ->
 

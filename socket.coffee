@@ -24,9 +24,9 @@ createGameState = ->
   persistence.set 'gameState', createInitialGameState()
   return
 
-addPlayer = (id, callback) ->
+addPlayer = (player, callback) ->
   persistence.get 'gameState', (err, gameState) ->
-    gameState.players[id] = null
+    gameState.players[player.id] = player
     persistence.set 'gameState', gameState
     callback null, gameState.players
     return
@@ -49,7 +49,7 @@ assignRoles = ->
     persistence.set 'gameState', gameState
     return
 
-updateRoleQuantity = (role, quantity, callback) ->
+updateRole = (role, quantity, callback) ->
   persistence.get 'gameState', (err, gameState) ->
     gameState.roles[role] = quantity
     persistence.set 'gameState', gameState, callback
@@ -75,20 +75,20 @@ io.on 'connection', (socket) ->
     console.log 'Game Started'
     return
 
-  socket.on 'updateRoleQuantity', ({row, quantity}) ->
+  socket.on 'updateRole', ({role, quantity}) ->
     console.log "Updating #{ role } to #{ quantity }"
-    updateRoleQuantity role, quantity, sendGameState
+    updateRole role, quantity, -> sendGameState io
     return
 
   socket.on 'join', (player) ->
-    console.log "Player joined for #{ player.id }"
+    console.log "Player #{ player.id } joined as #{ player.name }"
 
     persistence.get 'gameState', (err, gameState) ->
       if not gameState
         gameState = createInitialGameState()
         persistence.set 'gameState', gameState
 
-      addPlayer player.id, -> sendPlayerState io
+      addPlayer player,  -> sendPlayerState io
 
       sendGameState io
       return
