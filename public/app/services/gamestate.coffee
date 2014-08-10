@@ -1,7 +1,16 @@
 angular.module('WolvesApp').service 'GameState', ($timeout) ->
   socket = io()
 
-  socket.on 'disconnect', ->
+  errMsg = null
+  socket.on 'showError', (message) ->
+    errMsg = message
+    document.write 'Error: ' + message
+    socket.disconnect()
+
+  socket.on 'disconnect', (args...)->
+    if errMsg
+      return
+
     document.write 'Reloading ...'
     setTimeout ->
       document.location.reload()
@@ -49,9 +58,12 @@ angular.module('WolvesApp').service 'GameState', ($timeout) ->
       quantity: quantity
     return
 
-  state.swap = (from, to) ->
-    socket.emit 'nightAction', swap: [from, to]
+  state.swap = (fromId, toId) ->
+    socket.emit 'nightAction', swap: [fromId, toId]
     return
+
+  state.nightAction = ->
+    socket.emit 'nightAction', {}
 
   state.startGame = ->
     socket.emit 'startGame'

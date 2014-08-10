@@ -128,11 +128,16 @@ io.on 'connection', (socket) ->
     return
 
   socket.on 'join', (player) ->
-    console.log "Player #{ player.id } joined as #{ player.name }"
-
     if not app.gameState
       console.log 'Creating initial game state'
       createNewGameState()
+
+    if app.gameState.state isnt 'lobby' and not (player.id of app.gameState.players)
+      socket.emit 'showError', 'Game in progress. please come back later. :)'
+      socket.disconnect()
+      return
+
+    console.log "Player #{ player.id } joined as #{ player.name }"
 
     player.socketId = socket.id
     socket.playerId = player.id
@@ -144,6 +149,10 @@ io.on 'connection', (socket) ->
 
   socket.on 'nightAction', ({swap}) ->
     player = app.gameState.players[socket.playerId]
+
+    if player.hasDoneAction
+      return
+
     player.hasDoneAction = true
 
     console.log "#{ player.name } took a night action as a #{ player.startRole }

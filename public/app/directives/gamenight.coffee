@@ -11,9 +11,15 @@ angular.module('WolvesApp').directive 'gameNight', ->
       .values()
 
     $scope.stealPlayer = ([player]) ->
-      console.log 'stelaing', player.name
+      robbed = _.find GameState.players, (p) -> p.id == player.id
+
+      alert "Stole #{robbed.startRole} from #{robbed.name}"
+
+      GameState.swap $scope.player.id, player.id
+      $scope.player.hasDoneAction = true
 
     $scope.swapPlayers = ([player1, player2]) ->
-      console.log 'swapping', player1.name, player2.name
+      GameState.swap player1.id, player2.id
+      $scope.player.hasDoneAction = true
 
   link: ->
