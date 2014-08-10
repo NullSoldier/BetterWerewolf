@@ -3,12 +3,10 @@ angular.module('WolvesApp').directive 'gameNight', ->
 
   controller: ($scope, GameState) ->
     $scope.others = _.filter GameState.players, (p) ->
-      p.id != $scope.player.id
+      return p.id != $scope.player.id
 
-    $scope.werewolves = _.chain $scope.others
-      .filter (p) -> p.role == 'werewolves'
-      .keys()
-      .values()
+    $scope.werewolves = _.filter $scope.others, (p) ->
+      return p.startRole == 'werewolf'
 
     $scope.stealPlayer = ([player]) ->
       robbed = _.find GameState.players, (p) -> p.id == player.id

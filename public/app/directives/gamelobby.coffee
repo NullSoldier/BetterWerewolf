@@ -58,6 +58,3 @@ angular.module('WolvesApp').directive 'gameLobby', ->
       playerCount   = _.keys($scope.currentGame.players).length
       requiredCount = $scope.roleCount - 3
       return playerCount == requiredCount
-
-  link: (scope, element, attrs) ->
-
