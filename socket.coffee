@@ -50,20 +50,45 @@ assignRoles = ->
     persistence.set 'gameState', gameState
     return
 
-io.on 'connection', (socket) ->
-  socket.on 'updateRoleQuantity', (role, quantity) ->
-    console.log "Updating #{ role } to #{ quantity }"
+updateRoleQuantity = (role, quantity, callback) ->
+  persistence.get 'gameState', (err, gameState) ->
+    gameState.roles[role] = quantity
+    persistence.set 'gameState', gameState, callback
+  return
+
+sendGameState = ->
+  persistence.get 'gameState', (err, gameState) ->
+    io.emit
+      roles   : gameState.roles
+      duration:
+        seconds: gameState.nightDurationSeconds
     return
+  return
+
+sendPlayerState = ->
+  persistence.get 'gameState', (err, gameState) ->
+    io.emit
+      players: gameState.players
+    return
+  return
+
+io.on 'connection', (socket) ->
 
   socket.on 'startGame', ->
     console.log 'Game Started'
     return
 
+  socket.on 'updateRoleQuantity', (role, quantity) ->
+    console.log "Updating #{ role } to #{ quantity }"
+    updateRoleQuantity role, quantity, sendGameState
+    return
+
   socket.on 'join', (player) ->
+    console.log "Player joined for #{ id }"
 
     persistence.get 'gameState', (err, gameState) ->
       if not gameState
-        persistence.set 'gameState', createInitialGameState()
+        persistence.set 'gameState', createInitialGameState(), sendPlayerState
       return
     return
 
