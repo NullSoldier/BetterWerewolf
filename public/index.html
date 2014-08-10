@@ -3,22 +3,20 @@
 <head>
   <title>BetterWerewolf</title>
 
-  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.css">
+  <link rel="stylesheet" href="/vendor/bootstrap/dist/css/bootstrap.min.css">
   <link rel="stylesheet" href="/stylesheets/style.css">
 
-  <script src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min.js"></script>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.js"></script>
-  <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.js"></script>
-  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.21/angular.js"></script>
-  <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.21/angular-route.js"></script>
-  <script src="/javascripts/angular-local-storage.js"></script>
+  <!-- 3rd party libraries -->
+  <script src="/vendor/lodash/dist/lodash.min.js"></script>
+  <script src="/vendor/angular/angular.min.js"></script>
+  <script src="/vendor/angular-route/angular-route.min.js"></script>
+  <script src="/vendor/angular-local-storage/angular-local-storage.min.js"></script>
   <script src="/socket.io/socket.io.js"></script>
 
+  <!-- our app -->
   <script src="/app/init.js"></script>
-
   <script src="/app/controllers/root.js"></script>
   <script src="/app/services/gamestate.js"></script>
-
   <script src="/app/directives/selectplayers.js"></script>
   <script src="/app/directives/gamelobby.js"></script>
   <script src="/app/directives/gamenight.js"></script>

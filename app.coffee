@@ -29,6 +29,7 @@ app.use coffee(src: "#{ __dirname }/public")
 app.use less("#{ __dirname }/public")
 
 app.use express.static "#{ __dirname }/public"
+app.use '/vendor', express.static "#{ __dirname }/bower_components"
 
 # set the routes
 app.use '/', require('./routes/index')
