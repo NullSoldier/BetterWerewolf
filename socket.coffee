@@ -4,20 +4,19 @@ _           = require 'lodash'
 
 createInitialGameState = ->
   return {
-    gameState: {
-      state: 'waiting'
-      nightDurationSeconds: '600'
-      nightEndDate: null
-      players: {}
-      roles: {
-        werewolf    : 1
-        minion      : 0
-        villager    : 1
-        seer        : 1
-        robber      : 1
-        troublemaker: 1
-        tanner      : 0
-      }
+    state: 'lobby'
+    durationSeconds: 600
+    dayEnd: null
+    nightEnd: null
+    players: {}
+    roles: {
+      werewolf    : 1
+      minion      : 0
+      villager    : 1
+      seer        : 1
+      robber      : 1
+      troublemaker: 1
+      tanner      : 0
     }
   }
 
@@ -27,7 +26,7 @@ createGameState = ->
 
 addPlayer = (id, callback) ->
   persistence.get 'gameState', (err, gameState) ->
-    gameState.players.id = null
+    gameState.players[id] = null
     persistence.set 'gameState', gameState
     callback null, gameState.players
     return
@@ -56,19 +55,17 @@ updateRoleQuantity = (role, quantity, callback) ->
     persistence.set 'gameState', gameState, callback
   return
 
-sendGameState = ->
+sendGameState = (to) ->
   persistence.get 'gameState', (err, gameState) ->
-    io.emit
-      roles   : gameState.roles
-      duration:
-        seconds: gameState.nightDurationSeconds
+    to.emit 'game',
+      roles          : gameState.roles
+      durationSeconds: gameState.durationSeconds
     return
   return
 
-sendPlayerState = ->
+sendPlayerState = (to) ->
   persistence.get 'gameState', (err, gameState) ->
-    io.emit
-      players: gameState.players
+    to.emit 'players', gameState.players
     return
   return
 
@@ -78,17 +75,22 @@ io.on 'connection', (socket) ->
     console.log 'Game Started'
     return
 
-  socket.on 'updateRoleQuantity', (role, quantity) ->
+  socket.on 'updateRoleQuantity', ({row, quantity}) ->
     console.log "Updating #{ role } to #{ quantity }"
     updateRoleQuantity role, quantity, sendGameState
     return
 
   socket.on 'join', (player) ->
-    console.log "Player joined for #{ id }"
+    console.log "Player joined for #{ player.id }"
 
     persistence.get 'gameState', (err, gameState) ->
       if not gameState
-        persistence.set 'gameState', createInitialGameState(), sendPlayerState
+        gameState = createInitialGameState()
+        persistence.set 'gameState', gameState
+
+      addPlayer player.id, -> sendPlayerState io
+
+      sendGameState io
       return
     return
 

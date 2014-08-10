@@ -5,6 +5,7 @@ angular.module('WolvesApp').service 'GameState', ($log) ->
   socket.on 'game', (game) ->
     state.roles = game.roles
     state.duration = game.duration
+    console.log game
     return
 
   socket.on 'players', (players) ->
