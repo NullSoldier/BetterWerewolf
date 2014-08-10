@@ -4,7 +4,7 @@ angular.module('WolvesApp').service 'GameState', ($log, $timeout) ->
 
   socket.on 'game', (game) -> $timeout ->
     state.roles = game.roles
-    state.duration = game.duration
+    state.duration = game.durationSeconds
     return
 
   socket.on 'players', (players) -> $timeout ->
@@ -13,6 +13,10 @@ angular.module('WolvesApp').service 'GameState', ($log, $timeout) ->
 
   state.join = (player) ->
     socket.emit 'join', player
+    return
+
+  state.updateDuration = (seconds) ->
+    socket.emit 'updateDuration', seconds
     return
 
   state.updateRole = (role, quantity) ->

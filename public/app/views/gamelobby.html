@@ -9,6 +9,9 @@
       <span>Count: {{ role.num }}</span>
     </div>
 
+    <select ng-model="timerSelect">
+      <option ng-repeat="row in timerValues" ng-selected="row.selected" value="{{ row.value }}">{{ row.display }}</option>
+    </select>
     <hr>
 
     <a class="btn btn-success" ng-click="start()" ng-disabled="!canStart()">Start Game!</a>

@@ -6,6 +6,14 @@ angular.module('WolvesApp').directive 'gameLobby', ->
       werewolf: 2
       villager: 3
 
+    setTimerValues = (currentSeconds) ->
+      $scope.timerValues = []
+      for minutes in [1..10]
+        $scope.timerValues.push
+          value: minutes * 60
+          display: "#{minutes} Minutes"
+          selected: currentSeconds == (minutes * 60)
+
     setRoles = (gameRoles) ->
       if not gameRoles
         return
@@ -31,6 +39,11 @@ angular.module('WolvesApp').directive 'gameLobby', ->
         }
 
     $scope.$watch 'currentGame.roles', setRoles, true
+    $scope.$watch 'currentGame.duration', setTimerValues
+
+    $scope.$watch 'timerSelect', (value) ->
+      if value
+        GameState.updateDuration value
 
     $scope.toggleRole = (role, index) ->
       role.selected[index] = not role.selected[index]
