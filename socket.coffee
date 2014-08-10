@@ -25,20 +25,21 @@ createGameState = ->
   persistence.set 'gameState', createInitialGameState()
   return
 
-addPlayer = (id) ->
-  persistence.get 'gameState', (gameState) ->
+addPlayer = (id, callback) ->
+  persistence.get 'gameState', (err, gameState) ->
     gameState.players.id = null
     persistence.set 'gameState', gameState
+    callback null, gameState.players
     return
 
 removePlayer = (id) ->
-  persistence.get 'gameState', (gameState) ->
+  persistence.get 'gameState', (err, gameState) ->
     delete gameState.players[id]
     persistence.set 'gameState', gameState
     return
 
-assignRoles = () ->
-  persistence.get 'gameState', (gameState) ->
+assignRoles = ->
+  persistence.get 'gameState', (err, gameState) ->
     roles    = _.keys gameState.roles
     shuffled = _.shuffle roles
 
@@ -52,16 +53,18 @@ assignRoles = () ->
 io.on 'connection', (socket) ->
   socket.join('bw')
 
-  socket.on 'playerInfo', (id, name) ->
-    console.log "Player Info for #{ id } (#{ name })"
-    return
-
   socket.on 'updateRoleQuantity', (role, quantity) ->
     console.log "Updating #{ role } to #{ quantity }"
     return
 
   socket.on 'startGame', ->
     console.log 'Game Started'
+    return
+
+  socket.on 'join', (player) ->
+    addPlayer player.id, (err, players) ->
+      socket.emit 'players', players
+      return
     return
 
 module.exports = io

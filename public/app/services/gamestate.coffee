@@ -9,6 +9,11 @@ angular.module('WolvesApp').service 'GameState', ($log) ->
 
   socket.on 'players', (players) ->
     state.players = players
+    console.log players
+    return
+
+  state.join = (player) ->
+    socket.emit 'join', player
     return
 
   $log.info 'gamestate service'
