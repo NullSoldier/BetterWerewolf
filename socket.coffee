@@ -1,6 +1,6 @@
 io          = require('socket.io')()
-persistence = require('./persistence')
-_           = require('lodash')
+persistence = require './persistence'
+_           = require 'lodash'
 
 createInitialGameState = ->
   return {
