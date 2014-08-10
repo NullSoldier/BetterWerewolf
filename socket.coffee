@@ -31,10 +31,10 @@ addPlayer = (player, callback) ->
     callback null, gameState.players
     return
 
-removePlayer = (id) ->
+removePlayer = (id, callback) ->
   persistence.get 'gameState', (err, gameState) ->
     delete gameState.players[id]
-    persistence.set 'gameState', gameState
+    persistence.set 'gameState', gameState, callback
     return
 
 assignRoles = ->
@@ -75,6 +75,11 @@ io.on 'connection', (socket) ->
     console.log 'Game Started'
     return
 
+  socket.on 'disconnect', ->
+    console.log "Player #{ socket.playerId } is leaving"
+    removePlayer socket.playerId, -> sendPlayerState io
+    return
+
   socket.on 'updateRole', ({role, quantity}) ->
     console.log "Updating #{ role } to #{ quantity }"
     updateRole role, quantity, -> sendGameState io
@@ -88,6 +93,8 @@ io.on 'connection', (socket) ->
         gameState = createInitialGameState()
         persistence.set 'gameState', gameState
 
+      player.socketId = socket.id
+      socket.playerId = player.id
       addPlayer player,  -> sendPlayerState io
 
       sendGameState io
