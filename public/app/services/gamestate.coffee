@@ -1,6 +1,12 @@
 angular.module('WolvesApp').service 'GameState', ($timeout) ->
   socket = io()
 
+  socket.on 'disconnect', ->
+    document.write 'Realoading ...'
+    setTimeout ->
+      document.location.reload()
+    , 1000
+
   state =
     state: 'loading'
     durationSeconds: null

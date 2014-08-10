@@ -109,7 +109,7 @@ io.on 'connection', (socket) ->
     return
 
   socket.on 'disconnect', ->
-    if socket.playerId and app.gameState.state = 'lobby'
+    if socket.playerId and app.gameState.state is 'lobby'
       console.log "Player #{ socket.playerId } is leaving"
       removePlayer socket.playerId
       sendPlayerState io
