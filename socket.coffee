@@ -146,13 +146,14 @@ io.on 'connection', (socket) ->
     player = app.gameState.players[socket.playerId]
     player.hasDoneAction = true
 
-    # queue up player action
-    switch player.startRole
-      when 'robber', 'troublemaker'
-        app.gameState.actions.push
-          type: player.startRole
-          from: socket.playerId
-          to  : targetId
+    canUseAction = player.startRole is 'robber' or player.startRole is 'troublemaker'
+
+    if canUseAction
+      # queue up player action
+      app.gameState.actions.push
+        type: player.startRole
+        from: socket.playerId
+        to  : targetId
 
     app.gameState.nightResponseCount += 1
 
