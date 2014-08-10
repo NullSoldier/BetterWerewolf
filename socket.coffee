@@ -108,6 +108,11 @@ io.on 'connection', (socket) ->
     return
 
   socket.on 'disconnect', ->
+    if io.sockets.sockets.length is 0
+      last person disconnected, reset the game data.
+      createNewGameState()
+      return
+
     if socket.playerId and app.gameState.state is 'lobby'
       console.log "Player #{ socket.playerId } is leaving"
       removePlayer socket.playerId
