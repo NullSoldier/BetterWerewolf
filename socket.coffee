@@ -43,9 +43,10 @@ assignRoles = ->
 
   shuffled = _.shuffle roles
 
-  for player of app.gameState.players
+  for id, player of app.gameState.players
     player.startRole = shuffled.pop()
     player.currentRole = player.startRole
+
     console.log "Assigned #{ player.name } to #{ player.startRole }"
 
   while shuffled.length > 0
