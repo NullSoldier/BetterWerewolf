@@ -33,9 +33,7 @@ angular.module('WolvesApp').directive 'gameLobby', ->
       role.selected[index] = not role.selected[index]
       role.num = _.filter(role.selected).length
 
-      GameState.updateRole
-        role: role.name
-        quantity: role.num
+      GameState.updateRole role.name, role.num
 
     $scope.start = ->
 
