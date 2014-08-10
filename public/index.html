@@ -14,10 +14,10 @@
 
   <script src="/app/init.js"></script>
 
-  <script src="/app/services/socket.js"></script>
-  <script src="/app/services/gamestate.js"></script>
   <script src="/app/controllers/root.js"></script>
   <script src="/app/directives/gamelobby.js"></script>
+  <script src="/app/services/gamestate.js"></script>
+  <script src="/app/services/socket.js"></script>
 </head>
 <body ng-app="WolvesApp" ng-controller="RootController" ng-cloak>
   <div ng-if="player">Playing as <b>{{ player.name }} [{{ player.id }}]</b></div>

@@ -14,3 +14,4 @@ angular.module('WolvesApp').controller 'RootController',
         localStorageService.set 'player', $scope.player
 
     $scope.currentGame = GameState
+    return
