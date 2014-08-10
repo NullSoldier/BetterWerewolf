@@ -142,9 +142,12 @@ io.on 'connection', (socket) ->
     sendPlayerState io
     return
 
-  socket.on 'nightAction', ({type, fromId, toId}) ->
+  socket.on 'nightAction', ({swap}) ->
     player = app.gameState.players[socket.playerId]
     player.hasDoneAction = true
+
+    console.log "#{ player.name } took a night action as a #{ player.startRole }
+     ( #{app.gameState.nightResponseCount + 1 } / #{ _.keys(app.gameState.players).length } )"
 
     canUseAction = player.startRole is 'robber' or player.startRole is 'troublemaker'
 
@@ -152,15 +155,17 @@ io.on 'connection', (socket) ->
       # queue up player action
       app.gameState.actions.push
         type: player.startRole
-        from: socket.playerId
-        to  : targetId
+        from: swap[0]
+        to  : swap[1]
 
     app.gameState.nightResponseCount += 1
 
     # once all players have gone, start day round
-    if app.gameState.nightResponseCount is app.gameState.players.length
+    if app.gameState.nightResponseCount is _.keys(app.gameState.players).length
       resolveActions()
-      setGameState 'day'
+      setState 'day'
+
+      console.log 'Day starting'
       io.emit 'gameDayStart',
         players  : app.gameState.players
         unclaimed: app.gameState.unclaimed

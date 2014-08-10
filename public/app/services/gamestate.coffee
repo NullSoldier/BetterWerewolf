@@ -23,6 +23,12 @@ angular.module('WolvesApp').service 'GameState', ($timeout) ->
     state.unclaimed = unclaimed
     return
 
+  socket.on 'gameDayStart', ({players, unclaimed}) -> $timeout ->
+    state.state = 'day'
+    state.players = players
+    state.unclaimed = unclaimed
+    return
+
   state.join = (player) ->
     socket.emit 'join', player
     return
@@ -35,6 +41,10 @@ angular.module('WolvesApp').service 'GameState', ($timeout) ->
     socket.emit 'updateRole',
       role: role
       quantity: quantity
+    return
+
+  state.swap = (from, to) ->
+    socket.emit 'nightAction', swap: [from, to]
     return
 
   state.startGame = ->
