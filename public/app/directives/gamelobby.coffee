@@ -10,8 +10,10 @@ angular.module('WolvesApp').directive 'gameLobby', ->
       if not gameRoles
         return
 
+      $scope.roleCount = 0
       $scope.roles = []
-      for name, num of $scope.currentGame.roles
+
+      for name, num of gameRoles
         index = 0
         selected = Array(maxes[name] or 1)
         for value in selected
@@ -20,6 +22,7 @@ angular.module('WolvesApp').directive 'gameLobby', ->
           selected[index] = true
           index++
 
+        $scope.roleCount += num
         $scope.roles.push {
           name: name
           max:  maxes[name] or 1
@@ -36,6 +39,13 @@ angular.module('WolvesApp').directive 'gameLobby', ->
       GameState.updateRole role.name, role.num
 
     $scope.start = ->
+      GameState.startGame()
+      return
+
+    $scope.canStart = ->
+      playerCount    = _.keys($scope.currentGame.players).length
+      minPlayerCount = $scope.roleCount - 3
+      return playerCount >= minPlayerCount
 
   link: (scope, element, attrs) ->
 
