@@ -51,8 +51,6 @@ assignRoles = ->
     return
 
 io.on 'connection', (socket) ->
-  socket.join('bw')
-
   socket.on 'updateRoleQuantity', (role, quantity) ->
     console.log "Updating #{ role } to #{ quantity }"
     return
@@ -62,8 +60,10 @@ io.on 'connection', (socket) ->
     return
 
   socket.on 'join', (player) ->
-    addPlayer player.id, (err, players) ->
-      socket.emit 'players', players
+
+    persistence.get 'gameState', (err, gameState) ->
+      if not gameState
+        persistence.set 'gameState', createInitialGameState()
       return
     return
 
