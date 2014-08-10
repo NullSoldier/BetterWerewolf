@@ -1,13 +1,13 @@
-angular.module('WolvesApp').service 'GameState', ($log, Socket) ->
-
+angular.module('WolvesApp').service 'GameState', ($log) ->
+  socket = io()
   state = {}
 
-  Socket.on 'game', (game) ->
+  socket.on 'game', (game) ->
     state.roles = game.roles
     state.duration = game.duration
     return
 
-  Socket.on 'players', (players) ->
+  socket.on 'players', (players) ->
     state.players = players
     return
 
