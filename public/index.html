@@ -5,6 +5,8 @@
 
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.css">
   <link rel="stylesheet" href="/stylesheets/style.css">
+
+  <script src="//cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min.js"></script>
   <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.js"></script>
   <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.js"></script>
   <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.2.21/angular.js"></script>
@@ -20,7 +22,6 @@
 </head>
 <body ng-app="WolvesApp" ng-controller="RootController" ng-cloak>
   <div ng-if="player">Playing as <b>{{ player.name }} [{{ player.id }}]</b></div>
-
-  <div ng-if="gameState" game-lobby="gameState"></div>
+  <div ng-if="currentGame" game-lobby="currentGame"></div>
 </body>
 </html>

@@ -1,0 +1,23 @@
+<div class="row">
+  <div class="col-md-9">
+    <div ng-repeat="role in roles">
+      <div ng-repeat="selected in role.selected track by $index"
+        ng-click="toggleRole(role, $index)"
+        ng-class="selected ? 'btn btn-primary' : 'btn btn-default'">
+        {{ role.name }}
+      </div>
+      <span>Count: {{ role.num }}</span>
+    </div>
+
+    <hr>
+
+    <a class="btn btn-success" ng-click="start()">Start Game!</a>
+  </div>
+
+  <div class="col-md-3">
+    <h3>Players</h3>
+    <ul>
+      <li ng-repeat="player in currentGame.players">{{ player.name }} </li>
+    </ul>
+  </div>
+</div>
