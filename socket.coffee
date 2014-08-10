@@ -27,6 +27,9 @@ setState = (state) ->
   return
 
 addPlayer = (player) ->
+  if player.id of app.gameState.players
+    return
+
   app.gameState.players[player.id] = player
   return
 
@@ -87,7 +90,7 @@ io.on 'connection', (socket) ->
     return
 
   socket.on 'disconnect', ->
-    if socket.playerId
+    if socket.playerId and app.gameState.state = 'lobby'
       console.log "Player #{ socket.playerId } is leaving"
       removePlayer socket.playerId
       sendPlayerState io

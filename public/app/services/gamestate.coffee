@@ -1,4 +1,4 @@
-angular.module('WolvesApp').service 'GameState', ($log, $timeout) ->
+angular.module('WolvesApp').service 'GameState', ($timeout) ->
   socket = io()
 
   state =
@@ -17,7 +17,7 @@ angular.module('WolvesApp').service 'GameState', ($log, $timeout) ->
     state.players = players
     return
 
-  socket.on 'gameNightStart', ({players, unclaimed}) ->
+  socket.on 'gameNightStart', ({players, unclaimed}) -> $timeout ->
     state.state = 'night'
     state.players = players
     state.unclaimed = unclaimed
