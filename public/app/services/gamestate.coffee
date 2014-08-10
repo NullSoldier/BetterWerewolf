@@ -23,9 +23,7 @@ angular.module('WolvesApp').service 'GameState', ($timeout) ->
     players: null
 
   socket.on 'game', (game) -> $timeout ->
-    state.state = game.state
-    state.roles = game.roles
-    state.duration = game.durationSeconds
+    _.extend state, game
     return
 
   socket.on 'players', (players) -> $timeout ->
@@ -38,8 +36,9 @@ angular.module('WolvesApp').service 'GameState', ($timeout) ->
     state.unclaimed = unclaimed
     return
 
-  socket.on 'gameDayStart', ({players, unclaimed}) -> $timeout ->
+  socket.on 'gameDayStart', ({dayEnd, players, unclaimed}) -> $timeout ->
     state.state = 'day'
+    state.dayEnd = dayEnd
     state.players = players
     state.unclaimed = unclaimed
     return

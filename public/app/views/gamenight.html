@@ -47,8 +47,8 @@ You are a <b>{{ player.startRole }}</b>
       <div select-players count="2" source="others" actionText="Swap Cards" done="swapPlayers"></div>
     </div>
     <div ng-switch-default>
-      Who is the prettiest?
-      <div select-players count="1" source="others" actionText="This guy" done="markDone"></div>
+      You're cool
+      <div class="btn btn-primary" ng-click="markDone()">Thanks!</div>
     </div>
   </div>
 </div>

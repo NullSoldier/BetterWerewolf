@@ -1,4 +1,4 @@
-app = angular.module('WolvesApp', ['LocalStorageModule'])
+app = angular.module('WolvesApp', ['LocalStorageModule', 'timer'])
 
 app.config (localStorageServiceProvider) ->
   localStorageServiceProvider.setPrefix('better-werewolves')

@@ -66,10 +66,9 @@ updateDuration = (seconds) ->
   app.gameState.durationSeconds = seconds
 
 sendGameState = (to) ->
-  to.emit 'game',
-    state          : app.gameState.state
-    roles          : app.gameState.roles
-    durationSeconds: app.gameState.durationSeconds
+  state = _.clone app.gameState
+  delete state.players
+  to.emit 'game', state
   return
 
 sendPlayerState = (to) ->
@@ -173,9 +172,11 @@ io.on 'connection', (socket) ->
     if app.gameState.nightResponseCount is _.keys(app.gameState.players).length
       resolveActions()
       setState 'day'
+      app.gameState.dayEnd = Date.now() + (app.gameState.durationSeconds * 1000)
 
       console.log 'Day starting'
       io.emit 'gameDayStart',
+        dayEnd   : app.gameState.dayEnd
         players  : app.gameState.players
         unclaimed: app.gameState.unclaimed
     return

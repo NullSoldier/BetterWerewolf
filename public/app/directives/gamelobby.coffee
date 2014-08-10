@@ -38,7 +38,7 @@ angular.module('WolvesApp').directive 'gameLobby', ->
           selected: selected
 
     $scope.$watch 'currentGame.roles', setRoles, true
-    $scope.$watch 'currentGame.duration', setTimerValues
+    $scope.$watch 'currentGame.durationSeconds', setTimerValues
 
     $scope.$watch 'timerSelect', (value) ->
       if value
