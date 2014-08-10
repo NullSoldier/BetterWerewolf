@@ -22,4 +22,8 @@ angular.module('WolvesApp').directive 'gameNight', ->
       GameState.swap player1.id, player2.id
       $scope.player.hasDoneAction = true
 
+    $scope.markDone = ->
+      GameState.nightAction()
+      $scope.player.hasDoneAction = true
+
   link: ->
