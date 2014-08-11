@@ -1,3 +1,7 @@
 angular.module('WolvesApp').directive 'gameEnded', ->
-  controller: ->
+  templateUrl: '/app/views/gameended.html'
+
+  controller: ($scope, GameState) ->
+    $scope.players = GameState.players
+
   link: ->

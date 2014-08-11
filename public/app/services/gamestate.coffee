@@ -43,6 +43,12 @@ angular.module('WolvesApp').service 'GameState', ($timeout) ->
     state.unclaimed = unclaimed
     return
 
+  socket.on 'gameEnded', ({players, unclaimed}) -> $timeout ->
+    state.state = 'ended'
+    state.players = players
+    state.unclaimed = unclaimed
+    return
+
   state.join = (player) ->
     socket.emit 'join', player
     return
