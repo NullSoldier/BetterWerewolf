@@ -7,6 +7,8 @@ createNewGameState = ->
     state: 'lobby'
     durationSeconds: 600
     dayEnd: null
+    votingEnd: null
+    voteDurationSeconds: 5
     nightEnd: null
     players: {}
     unclaimed: []
@@ -93,6 +95,23 @@ resolveActions = ->
     toCurrent = to.currentRole
     to.currentRole = from.currentRole
     from.currentRole = to.toCurrent
+  return
+
+startVoting = ->
+  setState 'voting'
+  app.gameState.votingEnd = Date.now() + (app.gameState.voteDurationSeconds * 1000)
+
+  io.emit 'gameVoting',
+    votingEnd: app.gameState.votingEnd
+
+  setTimeout startGameEnded, app.gameState.voteDurationSeconds * 1000
+  return
+
+startGameEnded = ->
+  setState 'ended'
+  io.emit 'gameEnded',
+    players  : app.gameState.players
+    unclaimed: app.gameState.unclaimed
   return
 
 io.on 'connection', (socket) ->
@@ -185,12 +204,8 @@ io.on 'connection', (socket) ->
         players  : app.gameState.players
         unclaimed: app.gameState.unclaimed
 
-      setTimeout (->
-        setState 'ended'
-        io.emit 'gameEnded',
-          players  : app.gameState.players
-          unclaimed: app.gameState.unclaimed
-      ), app.gameState.durationSeconds * 1000
+      setTimeout startVoting, app.gameState.durationSeconds * 1000
     return
+
 
 module.exports = io

@@ -1,5 +1,11 @@
 The game ended..
 
-<div ng-repeat="player in players">
+<h2>Players</h2>
+<div ng-repeat="player in currentGame.players">
   {{ player.name }}: {{ player.startRole }} -> {{ player.currentRole }}
+</div>
+
+<h2>Unclaimed roles</h2>
+<div ng-repeat="role in currentGame.unclaimed">
+  {{ role }}
 </div>
