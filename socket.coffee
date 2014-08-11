@@ -184,6 +184,13 @@ io.on 'connection', (socket) ->
         dayEnd   : app.gameState.dayEnd
         players  : app.gameState.players
         unclaimed: app.gameState.unclaimed
+
+      setTimeout (->
+        setState 'ended'
+        io.emit 'gameEnded',
+          players  : app.gameState.players
+          unclaimed: app.gameState.unclaimed
+      ), app.gameState.durationSeconds * 1000
     return
 
 module.exports = io
