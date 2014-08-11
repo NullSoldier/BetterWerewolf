@@ -4,6 +4,8 @@ app.config (localStorageServiceProvider) ->
   localStorageServiceProvider.setPrefix('better-werewolves')
   return
 
+navigator.vibrate = navigator.vibrate || navigator.webkitVibrate || navigator.mozVibrate || navigator.msVibrate;
+
 app.run ($window) ->
   $window.UUID = ->
     gen = (s) ->
