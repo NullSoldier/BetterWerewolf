@@ -1,6 +1,7 @@
 angular.module('WolvesApp').directive 'gameVoting', ->
-  template: '''VOTING ROUND... <timer end-time="currentGame.votingEnd">{{minutes}} minutes, {{seconds}} seconds</timer>'''
+  template: '''Time to vote... <timer end-time="currentGame.votingEnd">{{seconds}} seconds</timer>'''
   controller: ($scope) ->
-    console.log 'Voting!', $scope.currentGame
+    window.navigator.vibrate [250, 750, 250, 750, 250, 750, 250, 750, 250]
+    return
 
   link: ->
