@@ -6,13 +6,16 @@ You are a <b>{{ player.startRole }}</b>
   <div ng-switch="player.startRole">
     <div ng-switch-when="seer">
       Look at a card, or two in the middle
-      <ul>
-        <li>Look at 2 middle cards</li>
-        <li ng-repeat="other in others">
-          Look at {{ other.name }}'s card
-          </li>
-      </ul>
-      <div class="btn btn-primary" ng-click="markDone()">TODO THIS</div>
+        <p>
+          <div class="btn btn-primary" ng-click="lookAt('middle')">
+          Look at 2 middle cards
+          </div>
+        </p>
+        <p ng-repeat="other in others">
+          <span class="btn btn-primary" ng-click="lookAt(other)">
+            Look at {{ other.name }}'s card
+          </span>
+        </p>
     </div>
     <div ng-switch-when="werewolf">
       <div ng-if="werewolves.length">

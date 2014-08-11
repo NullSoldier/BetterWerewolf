@@ -24,4 +24,17 @@ angular.module('WolvesApp').directive 'gameNight', ->
       GameState.nightAction()
       $scope.player.hasDoneAction = true
 
+    $scope.lookAt = (player) ->
+      if player is 'middle'
+        $scope.actionResult = """
+          Two middle cards are:
+          1. #{GameState.unclaimed[0]}
+          2. #{GameState.unclaimed[1]}
+        """
+      else
+        $scope.actionResult = "#{player.name} is a #{player.startRole}"
+
+      alert $scope.actionResult
+      $scope.markDone()
+
   link: ->
