@@ -94,7 +94,7 @@ resolveActions = ->
     # swap roles
     toCurrent = to.currentRole
     to.currentRole = from.currentRole
-    from.currentRole = to.toCurrent
+    from.currentRole = toCurrent
   return
 
 startVoting = ->
