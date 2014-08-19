@@ -5,7 +5,7 @@ app         = require './app'
 createNewGameState = ->
   app.gameState = {
     state: 'lobby'
-    durationSeconds: 600
+    durationSeconds: 300
     dayEnd: null
     votingEnd: null
     voteDurationSeconds: 5
