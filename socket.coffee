@@ -99,7 +99,9 @@ resolveActions = ->
 
 startVoting = ->
   setState 'voting'
-  app.gameState.votingEnd = Date.now() + (app.gameState.voteDurationSeconds * 1000)
+
+  durationMs = app.gameState.voteDurationSeconds * 1000
+  app.gameState.votingEnd = Date.now() + durationMs
 
   io.emit 'gameVoting',
     votingEnd: app.gameState.votingEnd
@@ -162,7 +164,9 @@ io.on 'connection', (socket) ->
       console.log 'Creating initial game state'
       createNewGameState()
 
-    if app.gameState.state isnt 'lobby' and not (player.id of app.gameState.players)
+    gameInProgress = app.gameState.state isnt 'lobby'
+    alreadyInGame = player.id of app.gameState.players
+    if gameInProgress and not alreadyInGame
       socket.emit 'showError', 'Game in progress. please come back later. :)'
       socket.disconnect()
       return
@@ -185,10 +189,13 @@ io.on 'connection', (socket) ->
 
     player.hasDoneAction = true
 
-    console.log "#{ player.name } took a night action as a #{ player.startRole }
-     ( #{app.gameState.nightResponseCount + 1 } / #{ _.keys(app.gameState.players).length } )"
+    numPlayers = _.keys(app.gameState.players).length
+    numResponses = app.gameState.nightResponseCount + 1
+    console.log "#{ player.name } took a night action
+              as a #{ player.startRole }
+     ( #{ numResponses } / #{ numPlayers } )"
 
-    canUseAction = player.startRole is 'robber' or player.startRole is 'troublemaker'
+    canUseAction = player.startRole in ['robber', 'troublemaker']
 
     if canUseAction
       # queue up player action
