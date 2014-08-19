@@ -44,6 +44,8 @@ angular.module('WolvesApp').directive 'gameLobby', ->
       if value
         GameState.updateDuration value
 
+    $scope.timerSelect = $scope.currentGame.durationSeconds
+
     $scope.toggleRole = (role, index) ->
       role.selected[index] = not role.selected[index]
       role.num = _.filter(role.selected).length
