@@ -6,6 +6,6 @@ The game ended..
 </div>
 
 <h2>Unclaimed roles</h2>
-<div ng-repeat="role in currentGame.unclaimed">
+<div ng-repeat="role in currentGame.unclaimed track by $index">
   {{ role }}
 </div>
