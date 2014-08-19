@@ -21,4 +21,8 @@ angular.module('WolvesApp').controller 'RootController',
       if players and $scope.player.id of players
         $scope.player = players[$scope.player.id]
 
+    $scope.rename = ->
+      localStorageService.set 'player', id: $scope.player.id
+      document.location.reload()
+
     return

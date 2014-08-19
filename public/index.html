@@ -30,7 +30,7 @@
 
   <div ng-if="currentGame && currentGame.players">
 
-    <div ng-if="player">Playing as <b>{{ player.name }} [{{ player.id }}]</b></div>
+    <div ng-if="player">Playing as <b>{{ player.name }}</b> (<a href="" ng-click="rename()">Rename)</a></div>
     <hr>
     <div ng-switch="currentGame.state">
       <div ng-switch-when="lobby"   game-lobby></div>
