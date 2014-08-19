@@ -83,9 +83,10 @@ resolveActions = ->
     'troublemaker'
   ]
 
-  sortedActions = _.sortBy app.gameState.actions, (a) -> actionOrder.indexOf a.type
+  app.gameState.actions = _.sortBy app.gameState.actions, (a) ->
+    actionOrder.indexOf a.type
 
-  for action in sortedActions
+  for action in app.gameState.actions
     from = app.gameState.players[action.from]
     to   = app.gameState.players[action.to]
 

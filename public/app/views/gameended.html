@@ -1,5 +1,17 @@
 The game ended..
 
+<h2>Actions</h2>
+<div ng-repeat="action in actions">
+  <div ng-switch="action.type">
+    <div ng-switch-when="robber">
+      <b>{{ action.who.name }}</b> stole <b>{{ action.to.name }}</b>'s <b>{{ action.to.startRole }}</b>
+    </div>
+    <div ng-switch-when="troublemaker">
+      <b>{{ action.who.name }}</b> swapped <b>{{ action.from.name }}</b> and <b>{{ action.to.name }}</b>
+    </div>
+  </div>
+</div>
+
 <h2>Players</h2>
 <div ng-repeat="player in currentGame.players">
   {{ player.name }}: {{ player.startRole }} -> {{ player.currentRole }}
