@@ -104,10 +104,17 @@ startVoting = ->
   io.emit 'gameVoting',
     votingEnd: app.gameState.votingEnd
 
-  setTimeout startGameEnded, app.gameState.voteDurationSeconds * 1000
+  setTimeout startResultWait, app.gameState.voteDurationSeconds * 1000
+  return
+
+startResultWait = ->
+  console.log 'Waiting for players to show results'
+  setState 'waiting'
+  io.emit 'waiting'
   return
 
 startGameEnded = ->
+  console.log 'Game has ended!'
   setState 'ended'
   io.emit 'gameEnded',
     players  : app.gameState.players
@@ -207,5 +214,6 @@ io.on 'connection', (socket) ->
       setTimeout startVoting, app.gameState.durationSeconds * 1000
     return
 
+  socket.on 'showResults', startGameEnded
 
 module.exports = io

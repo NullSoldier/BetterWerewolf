@@ -54,6 +54,10 @@ angular.module('WolvesApp').service 'GameState', ($timeout) ->
     state.unclaimed = unclaimed
     return
 
+  socket.on 'waiting', -> $timeout ->
+    state.state = 'waiting'
+    return
+
   state.join = (player) ->
     socket.emit 'join', player
     return
@@ -77,6 +81,10 @@ angular.module('WolvesApp').service 'GameState', ($timeout) ->
 
   state.startGame = ->
     socket.emit 'startGame'
+    return
+
+  state.showResults = ->
+    socket.emit 'showResults'
     return
 
   return state

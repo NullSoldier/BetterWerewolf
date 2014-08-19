@@ -23,6 +23,7 @@
   <script src="/app/directives/gamenight.js"></script>
   <script src="/app/directives/gamevoting.js"></script>
   <script src="/app/directives/gameday.js"></script>
+  <script src="/app/directives/gamewaiting.js"></script>
   <script src="/app/directives/gameended.js"></script>
 </head>
 <body ng-app="WolvesApp" ng-controller="RootController" ng-cloak>
@@ -32,11 +33,12 @@
     <div ng-if="player">Playing as <b>{{ player.name }} [{{ player.id }}]</b></div>
     <hr>
     <div ng-switch="currentGame.state">
-      <div ng-switch-when="lobby"  game-lobby></div>
-      <div ng-switch-when="night"  game-night></div>
-      <div ng-switch-when="day"    game-day></div>
-      <div ng-switch-when="voting" game-voting></div>
-      <div ng-switch-when="ended"  game-ended></div>
+      <div ng-switch-when="lobby"   game-lobby></div>
+      <div ng-switch-when="night"   game-night></div>
+      <div ng-switch-when="day"     game-day></div>
+      <div ng-switch-when="voting"  game-voting></div>
+      <div ng-switch-when="waiting" game-waiting></div>
+      <div ng-switch-when="ended"   game-ended></div>
       <div ng-switch-default>
         No matches for {{ gameState.state }}
       </div>
