@@ -11,6 +11,9 @@ angular.module('WolvesApp').service 'GameState', ($timeout) ->
     if errMsg
       return
 
+    if state.state == 'ended'
+      return
+
     document.write 'Reloading ...'
     setTimeout ->
       document.location.reload()
@@ -52,6 +55,7 @@ angular.module('WolvesApp').service 'GameState', ($timeout) ->
     state.state = 'ended'
     state.players = players
     state.unclaimed = unclaimed
+    socket.disconnect()
     return
 
   socket.on 'gameWaiting', -> $timeout ->
