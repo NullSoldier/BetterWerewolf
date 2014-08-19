@@ -54,7 +54,7 @@ angular.module('WolvesApp').service 'GameState', ($timeout) ->
     state.unclaimed = unclaimed
     return
 
-  socket.on 'waiting', -> $timeout ->
+  socket.on 'gameWaiting', -> $timeout ->
     state.state = 'waiting'
     return
 

@@ -112,7 +112,7 @@ startVoting = ->
 startResultWait = ->
   console.log 'Waiting for players to show results'
   setState 'waiting'
-  io.emit 'waiting'
+  io.emit 'gameWaiting'
   return
 
 startGameEnded = ->
