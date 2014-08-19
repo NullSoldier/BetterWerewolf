@@ -1,25 +1,32 @@
-<div class="row">
-  <div class="col-md-9">
-    <div ng-repeat="role in roles">
-      <div ng-repeat="selected in role.selected track by $index"
-        ng-click="toggleRole(role, $index)"
-        ng-class="selected ? 'btn btn-primary' : 'btn btn-default'">
-        {{ role.name }}
-      </div>
+  <div class="row">
+    <div class="col-sm-6">
+      <h3>Players</h3>
+      <ul>
+        <li ng-repeat="player in currentGame.players">{{ player.name }} </li>
+      </ul>
+      <hr>
     </div>
 
-    <select ng-model="timerSelect">
-      <option ng-repeat="row in timerValues" ng-selected="row.selected" value="{{ row.value }}">{{ row.display }}</option>
-    </select>
-    <hr>
+    <div class="col-sm-6">
+      <div ng-repeat="role in roles">
+        <a class="btn btn-default" href=""
+        ng-click="addRole(role)"
+        ng-disabled="role.num == role.max">
+          {{ role.name }}
+          <span class="badge">{{ role.num }}</span>
+        </a>
+        <a href="" class="label label-danger"
+          ng-if="role.num > 0"
+          ng-click="removeRole(role)">
+          &times;
+        </a>
+      </div>
 
-    <a class="btn btn-success" ng-click="start()" ng-disabled="!canStart()">Start Game!</a>
-  </div>
+      <select ng-model="timerSelect">
+        <option ng-repeat="row in timerValues" ng-selected="row.selected" value="{{ row.value }}">{{ row.display }}</option>
+      </select>
+      <hr>
 
-  <div class="col-md-3">
-    <h3>Players</h3>
-    <ul>
-      <li ng-repeat="player in currentGame.players">{{ player.name }} </li>
-    </ul>
+      <a class="btn btn-success" ng-click="start()" ng-disabled="!canStart()">Start Game!</a>
+    </div>
   </div>
-</div>

@@ -22,20 +22,17 @@ angular.module('WolvesApp').directive 'gameLobby', ->
       $scope.roles = []
 
       for name, num of gameRoles
-        index = 0
-        selected = Array(maxes[name] or 1)
-        for value in selected
-          if num <= index
-            break
-          selected[index] = true
-          index++
-
         $scope.roleCount += num
         $scope.roles.push
           name: name
           max:  maxes[name] or 1
           num: num
-          selected: selected
+
+    $scope.addRole = (role) ->
+      GameState.updateRole role.name, (role.num+1)
+
+    $scope.removeRole = (role) ->
+      GameState.updateRole role.name, (role.num-1)
 
     $scope.$watch 'currentGame.roles', setRoles, true
     $scope.$watch 'currentGame.durationSeconds', setTimerValues
@@ -46,11 +43,6 @@ angular.module('WolvesApp').directive 'gameLobby', ->
 
     $scope.timerSelect = $scope.currentGame.durationSeconds
 
-    $scope.toggleRole = (role, index) ->
-      role.selected[index] = not role.selected[index]
-      role.num = _.filter(role.selected).length
-
-      GameState.updateRole role.name, role.num
 
     $scope.start = ->
       GameState.startGame()
